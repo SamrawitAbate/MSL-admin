@@ -1,5 +1,5 @@
-import 'package:admin/activatePage.dart';
-import 'package:admin/login.dart';
+import 'package:admin/pages/dashBord.dart';
+import 'package:admin/pages/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -43,7 +43,7 @@ class App extends StatelessWidget {
             return const Login();
           } else {
             //'User is signed in!'
-            return const ActivityPage();
+            return const DashBord();
           }
         }
 

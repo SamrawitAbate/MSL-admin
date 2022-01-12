@@ -1,43 +1,29 @@
-import 'package:admin/login.dart';
-import 'package:admin/profile.dart';
+import 'package:admin/pages/profile.dart';
 import 'package:admin/widget/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class ActivityPage extends StatefulWidget {
-  const ActivityPage({Key? key}) : super(key: key);
+class InactiveUser extends StatefulWidget {
+  const InactiveUser({Key? key}) : super(key: key);
 
   @override
-  _ActivityPageState createState() => _ActivityPageState();
+  _InactiveUserState createState() => _InactiveUserState();
 }
 
-class _ActivityPageState extends State<ActivityPage> {
+class _InactiveUserState extends State<InactiveUser> {
   Stream<QuerySnapshot>? _iC;
   @override
   void initState() {
     super.initState();
     _iC = FirebaseFirestore.instance
-        .collection('maintenanceDetail')
+        .collection('userDetail')
         .where('active', isEqualTo: false)
         .snapshots();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          actions: [
-            IconButton(
-                onPressed: () async {
-                  await FirebaseAuth.instance.signOut();
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (_) => const Login()));
-                },
-                icon: const Icon(Icons.logout))
-          ],
-        ),
-        body: StreamBuilder<QuerySnapshot>(
+    return  StreamBuilder<QuerySnapshot>(
             stream: _iC,
             builder: (context, snapshot) {
               if (snapshot.hasError) {
@@ -46,7 +32,11 @@ class _ActivityPageState extends State<ActivityPage> {
               }
 
               if (snapshot.hasData) {
-                return ListView.builder(
+                return snapshot.data!.docs.isEmpty
+                ? const Center(
+                    child: Text('No Data'),
+                  )
+                : ListView.builder(
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
                       Timestamp t = snapshot.data!.docs[index]['registerDate'];
@@ -67,6 +57,6 @@ class _ActivityPageState extends State<ActivityPage> {
                     });
               }
               return const Loading();
-            }));
+            });
   }
 }

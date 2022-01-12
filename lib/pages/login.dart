@@ -1,6 +1,7 @@
-import 'package:admin/activatePage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import 'activatePage.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -32,7 +33,7 @@ class _LoginState extends State<Login> {
                           email: email.text, password: password.text);
                   if (userCredential.user != null) {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>const ActivityPage()));
+                        builder: (context) =>const ActivatePage()));
                   }
                 } on FirebaseAuthException catch (e) {
                   if (e.code == 'user-not-found') {

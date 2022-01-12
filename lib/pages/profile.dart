@@ -1,9 +1,10 @@
-import 'package:admin/activatePage.dart';
 import 'package:admin/service/database.dart';
 import 'package:admin/widget/listFile.dart';
 import 'package:admin/widget/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
+import 'activatePage.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({required this.uid, Key? key}) : super(key: key);
@@ -26,7 +27,7 @@ class _ProfilePageState extends State<ProfilePage> {
           appBar: AppBar(),
           body: StreamBuilder<DocumentSnapshot>(
               stream: FirebaseFirestore.instance
-                  .collection('Users')
+                  .collection('account')
                   .doc(widget.uid)
                   .snapshots(),
               builder: (BuildContext context,
@@ -120,7 +121,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          const ActivityPage()));
+                                          const ActivatePage()));
                             },
                             child: const Text(
                               'Activate',
