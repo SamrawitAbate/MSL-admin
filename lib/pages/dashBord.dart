@@ -1,4 +1,4 @@
-
+import 'package:admin/pages/disable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -19,22 +19,24 @@ class DashBord extends StatefulWidget {
 class _DashBordState extends State<DashBord> {
   final TextStyle style = TextStyle(
       color: Colors.green.shade600, fontSize: 20, fontWeight: FontWeight.w700);
-   int curentIndex = 0;
+  int curentIndex = 0;
   List<Widget> pages = [
-    const Home(),
+     Home(),
     const ActivatePage(),
     const InactivatePage(),
     const ActiveUser(),
-    const InactiveUser()
+    const InactiveUser(),
+    const DisableAccount()
   ];
   bool minValue = false;
   @override
   Widget build(BuildContext context) {
     final List<Widget> buttons = [
-      inkButton(1, 'Activate', context),
-      inkButton(2, 'Deactivate', context),
+      inkButton(1, 'Inactive service provider', context),
+      inkButton(2, 'Active service provider', context),
       inkButton(3, 'Active User', context),
       inkButton(4, 'Inactive User', context),
+      inkButton(5, 'Disable Account', context),
       IconButton(
           onPressed: () async {
             await FirebaseAuth.instance.signOut();
@@ -44,7 +46,7 @@ class _DashBordState extends State<DashBord> {
           icon: const Icon(Icons.logout))
     ];
     setState(() {
-      minValue = MediaQuery.of(context).size.width < 500;
+      minValue = MediaQuery.of(context).size.width < 820;
     });
     return Scaffold(
       drawer: minValue
@@ -61,7 +63,10 @@ class _DashBordState extends State<DashBord> {
                   curentIndex = 0;
                 });
               },
-              icon:  Icon(Icons.home_filled,color: curentIndex==0?Colors.green:Colors.white,)),
+              icon: Icon(
+                Icons.home_filled,
+                color: curentIndex == 0 ? Colors.green : Colors.white,
+              )),
           actions: minValue ? [] : buttons),
       body: pages[curentIndex],
     );

@@ -4,21 +4,15 @@ import 'package:admin/widget/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import 'activatePage.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({required this.uid, Key? key}) : super(key: key);
 
+class ProfilePage extends StatelessWidget {
+  const ProfilePage({required this.uid, Key? key,
+  required this.user,required this.accept
+  }) : super(key: key);
+  final bool user, accept;
   final String uid;
-  @override
-  State<ProfilePage> createState() => _ProfilePageState();
-}
 
-class _ProfilePageState extends State<ProfilePage> {
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +22,7 @@ class _ProfilePageState extends State<ProfilePage> {
           body: StreamBuilder<DocumentSnapshot>(
               stream: FirebaseFirestore.instance
                   .collection('account')
-                  .doc(widget.uid)
+                  .doc(uid)
                   .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<DocumentSnapshot> snapshot) {
@@ -106,22 +100,24 @@ class _ProfilePageState extends State<ProfilePage> {
                         const SizedBox(
                           height: 20.0,
                         ),
+                     user?Container():   Column(
+                          children: [
+
                         addList('Certificate', 'certificate'),
                         addList('Education Background', 'educationBackground'),
                         addList('Reference Material', 'referenceMaterial'),
+                          ],
+                        ),
                         const SizedBox(height: 20),
+                        !accept?Container():
                         ElevatedButton(
                             style: ButtonStyle(
                               backgroundColor:
                                   MaterialStateProperty.all(Colors.green),
                             ),
                             onPressed: () async {
-                              await changeState(widget.uid);
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const ActivatePage()));
+                              await changeState(uid);
+                              Navigator.pop(context);
                             },
                             child: const Text(
                               'Activate',
@@ -143,7 +139,7 @@ class _ProfilePageState extends State<ProfilePage> {
         Text(lable),
         ListFile(
           dir: value,
-          uid: widget.uid,
+          uid: uid,
         ),
       ],
     );
