@@ -1,12 +1,11 @@
-import 'package:admin/pages/disable.dart';
+import 'package:admin/pages/disableList.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'activatePage.dart';
-import 'activeUser.dart';
+import 'customer.dart';
 import 'home.dart';
 import 'inactivePage.dart';
-import 'inactiveUser.dart';
 import 'login.dart';
 
 class DashBord extends StatefulWidget {
@@ -21,11 +20,10 @@ class _DashBordState extends State<DashBord> {
       color: Colors.green.shade600, fontSize: 20, fontWeight: FontWeight.w700);
   int curentIndex = 0;
   List<Widget> pages = [
-     Home(),
+    const Home(),
     const ActivatePage(),
     const InactivatePage(),
-    const ActiveUser(),
-    const InactiveUser(),
+    const Customer(),
     const DisableAccount()
   ];
   bool minValue = false;
@@ -34,9 +32,8 @@ class _DashBordState extends State<DashBord> {
     final List<Widget> buttons = [
       inkButton(1, 'Inactive service provider', context),
       inkButton(2, 'Active service provider', context),
-      inkButton(3, 'Active User', context),
-      inkButton(4, 'Inactive User', context),
-      inkButton(5, 'Disable Account', context),
+      inkButton(3, 'Customer', context),
+      inkButton(4, 'Disable Account', context),
       IconButton(
           onPressed: () async {
             await FirebaseAuth.instance.signOut();

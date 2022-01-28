@@ -4,15 +4,12 @@ import 'package:admin/widget/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-
-
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({required this.uid, Key? key,
-  required this.user,required this.accept
-  }) : super(key: key);
-  final bool user, accept;
+  const ProfilePage(
+      {required this.uid, Key? key, required this.user,required this.disable,required this.accept})
+      : super(key: key);
+  final bool user, accept, disable;
   final String uid;
-
 
   @override
   Widget build(BuildContext context) {
@@ -100,30 +97,99 @@ class ProfilePage extends StatelessWidget {
                         const SizedBox(
                           height: 20.0,
                         ),
-                     user?Container():   Column(
-                          children: [
-
-                        addList('Certificate', 'certificate'),
-                        addList('Education Background', 'educationBackground'),
-                        addList('Reference Material', 'referenceMaterial'),
-                          ],
-                        ),
+                        user
+                            ? Container()
+                            : Column(
+                                children: [
+                                  addList('Certificate', 'certificate'),
+                                  addList('Education Background',
+                                      'educationBackground'),
+                                  addList('Reference Material',
+                                      'referenceMaterial'),
+                                ],
+                              ),
                         const SizedBox(height: 20),
-                        !accept?Container():
-                        ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.green),
-                            ),
-                            onPressed: () async {
-                              await changeState(uid);
-                              Navigator.pop(context);
-                            },
-                            child: const Text(
-                              'Activate',
-                              style: TextStyle(
-                                  fontSize: 30, fontWeight: FontWeight.w700),
-                            ))
+                         StreamBuilder<QuerySnapshot>(
+                            stream:  FirebaseFirestore.instance
+        .collection('comment')
+        .where('reciver_uid', isEqualTo: uid)
+        .snapshots(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasError) {
+                                return Center(
+                                    child: Text('Error: ${snapshot.error}'));
+                              }
+                              if (snapshot.hasData) {
+                                final List<DocumentSnapshot> documents =
+                                    snapshot.data!.docs;
+                                if (documents.isEmpty) {
+                                  return const Center(
+                                    child: Text('No Comment..'),
+                                  );
+                                }
+                                return ListView.builder(
+                                    itemBuilder: (_, index) {
+                                  return ListTile(
+                                    title: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        documents[index]['name'],
+                                        style: const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w700),
+                                      ),
+                                    ),
+                                    subtitle: Text(
+                                      documents[index]['message'],
+                                      style: const TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                  );
+                                });
+                              }
+                              return const Loading();
+                            }),
+                        
+                        !accept
+                            ? Container()
+                            : ElevatedButton(
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all(Colors.green),
+                                ),
+                                onPressed: () async {
+                                  await changeState(uid);
+                                  Navigator.pop(context);
+                                },
+                                child: const Text(
+                                  'Activate',
+                                  style: TextStyle(
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.w700),
+                                )),
+                        !disable
+                            ? Container()
+                            : Column(
+                              children: [
+
+                                ElevatedButton(
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(Colors.red),
+                                    ),
+                                    onPressed: () async {
+                                      await disableAccount(uid, user);
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text(
+                                      'Disable',
+                                      style: TextStyle(
+                                          fontSize: 30,
+                                          fontWeight: FontWeight.w700),
+                                    )),
+                              ],
+                            )
                       ],
                     ),
                   );

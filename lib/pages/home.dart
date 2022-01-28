@@ -26,16 +26,24 @@ class _HomeState extends State<Home> {
     return _myDocCount.length; // Count of Documents in Collection
   }
 
+  Future<int> countDisable() async {
+    QuerySnapshot _myDoc =
+        await FirebaseFirestore.instance.collection('disable').get();
+    List<DocumentSnapshot> _myDocCount = _myDoc.docs;
+    return _myDocCount.length; // Count of Documents in Collection
+  }
+
   List a = [
-    'Total registered user',
-    'Toal registered Skilled personal',
-    'Total Inactive Skilled personal',
-    'Total Active Skilled personal',
+    'Registered Customer',
+    'Registered Service Provider',
+    'Inactive Service Provider',
+    'Active Service Provider',
+    'Disabled Account'
   ];
 
   List? b;
 
-  int q = 0, w = 0, e = 0, r = 0;
+  int q = 0, w = 0, e = 0, r = 0, t = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -48,12 +56,15 @@ class _HomeState extends State<Home> {
     countSomeDocuments('maintenanceDetail', false).then((value) {
       e = value;
     });
+    countDisable().then((value) {
+      t = value;
+    });
     countSomeDocuments('maintenanceDetail', true).then((value) {
       setState(() {
         r = value;
       });
     });
-    b = [q, w, e, r];
+    b = [q, w, e, r, t];
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -66,47 +77,72 @@ class _HomeState extends State<Home> {
                 newMethod(1),
                 newMethod(2),
                 newMethod(3),
+                newMethod(4),
               ],
             ),
           ),
-       const  Center(child: Padding(
-         padding: EdgeInsets.all(8.0),
-         child: Text('Complains'),
-       ),),
+          const Center(
+            child: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text('Complains'),
+            ),
+          ),
           Card(
             elevation: 15,
             margin: const EdgeInsets.all(8.0),
-            child: StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection('complain')
-                    .snapshots(),
-                builder:
-                    (context, AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
-                  if (snapshot.hasData) {
-                    var data = snapshot.data!.docs;
-                    return data.isEmpty
-                        ? const Padding(
-                            padding: EdgeInsets.all(20),
-                            child: Center(
-                              child: Text('No Complain'),
-                            ),
-                          )
-                        : SizedBox(
-                            height: MediaQuery.of(context).size.height * .4,
-                            child: ListView.builder(
-                                itemCount: data.length,
-                                itemBuilder: (context, index) {
-                                  return ListTile(
-                                    title: Text(data[index]['to']),
-                                    subtitle: Text(data[index]['message']),
-                                    trailing: Text(data[index]['who']),
+            child: FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                future: FirebaseFirestore.instance.collection('disable').get(),
+                builder: (context, snapShot) {
+                  if (snapShot.hasData) {
+                    final a = snapShot.data!;
+                    final allData = a.docs.map((doc) => doc.id).toList();
+                    return StreamBuilder(
+                        stream: FirebaseFirestore.instance
+                            .collection('complain')
+                            .snapshots(),
+                        builder: (context,
+                            AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
+                          if (snapshot.hasData) {
+                            var data = snapshot.data!.docs;
+                            return data.isEmpty
+                                ? const Padding(
+                                    padding: EdgeInsets.all(20),
+                                    child: Center(
+                                      child: Text('No Complain'),
+                                    ),
+                                  )
+                                : SizedBox(
+                                    height:
+                                        MediaQuery.of(context).size.height * .4,
+                                    child: ListView.builder(
+                                        itemCount: data.length,
+                                        itemBuilder: (context, index) {
+                                          String id = data[index]['to'];
+                                          if (allData.contains(id)) {
+                                            return const Padding(
+                                              padding: EdgeInsets.all(8.0),
+                                              child: Center(
+                                                child:
+                                                    Text('No Active Complain'),
+                                              ),
+                                            );
+                                          } else {
+                                            return ListTile(
+                                              title: Text(id),
+                                              subtitle:
+                                                  Text(data[index]['message']),
+                                              trailing:
+                                                  Text(data[index]['who']),
+                                            );
+                                          }
+                                        }),
                                   );
-                                }),
-                          );
-                  }
-                  if (snapshot.hasError) {
-                    print(snapshot.error);
-                    throw Exception(snapshot.error);
+                          }
+                          if (snapshot.hasError) {
+                            throw Exception(snapshot.error);
+                          }
+                          return const Loading();
+                        });
                   }
                   return const Loading();
                 }),

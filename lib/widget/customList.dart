@@ -41,7 +41,7 @@ class CustomList extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => ProfilePage(
-                                          uid: snapshot.data!.docs[index].id, accept: accept, user: user,)));
+                                          uid: snapshot.data!.docs[index].id, accept: accept, user: user,disable: false,)));
                             },
                           ),
                         );

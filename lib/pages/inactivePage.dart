@@ -21,7 +21,7 @@ class InactivatePage extends StatelessWidget {
           }
 
           if (snapshot.hasData) {
-            return CustomList(snapshot: snapshot, accept: true, user: false,);
+            return CustomList(snapshot: snapshot, accept: false, user: false,);
           }
           return const Loading();
         });

@@ -9,17 +9,21 @@ class ActivatePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream:  FirebaseFirestore.instance
-        .collection('maintenanceDetail')
-        .where('active', isEqualTo: false)
-        .snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('maintenanceDetail')
+            .where('active', isEqualTo: false)
+            .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             debugPrint(snapshot.error.toString());
             return Center(child: Text('Error: ${snapshot.error}'));
           }
           if (snapshot.hasData) {
-            return CustomList(snapshot: snapshot, accept: false,  user: false,);
+            return CustomList(
+              snapshot: snapshot,
+              accept: true,
+              user: false,
+            );
           }
           return const Loading();
         });
