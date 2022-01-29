@@ -19,17 +19,17 @@ jobs:
 
         # Build Website
         - name: Build Website
-          run: |
-            flutter config --enable-web
-            flutter pub get
-            flutter build web --web-renderer html --release
-          working-directory: ./
+            run: |
+              flutter config --enable-web
+              flutter pub get
+              flutter build web --web-renderer html --release
+            working-directory: ./
 
         # Deploy Firebase Hosting
         - name: Deploy Firebase Hosting
-          uses: w9jds/firebase-action@master
-          with:
-            args: deploy --only hosting:maintenance-service-locator
-          env:
-            FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-            PROJECT_PATH: ./
+            uses: w9jds/firebase-action@master
+            with:
+              args: deploy --only hosting:maintenance-service-locator
+            env:
+              FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+              PROJECT_PATH: ./
