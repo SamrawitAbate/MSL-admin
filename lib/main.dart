@@ -38,8 +38,7 @@ class App extends StatelessWidget {
           return const Center(child: Icon(Icons.error));
         }
         if (snapshot.connectionState == ConnectionState.done) {
-          const Login();
-         
+          return const Login();
         }
 
         return const Center(child: Icon(Icons.circle_outlined));
