@@ -84,7 +84,7 @@ class _HomeState extends State<Home> {
           const Center(
             child: Padding(
               padding: EdgeInsets.all(8.0),
-              child: Text('Complains'),
+              child: Text('Complains',style: TextStyle(fontSize:25)),
             ),
           ),
           Card(
@@ -160,16 +160,13 @@ class _HomeState extends State<Home> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: Text(b![index].toString(),
-                  style: const TextStyle(
-                      fontSize: 35, fontWeight: FontWeight.w800)),
-            ),
+            Text(b![index].toString(),
+                style:
+                    const TextStyle(fontSize: 30, fontWeight: FontWeight.w800)),
             const SizedBox(height: 10),
             Text(a[index],
                 style:
-                    const TextStyle(fontSize: 30, fontWeight: FontWeight.w300)),
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.w400)),
           ],
         ),
       ),

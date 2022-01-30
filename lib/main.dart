@@ -38,13 +38,8 @@ class App extends StatelessWidget {
           return const Center(child: Icon(Icons.error));
         }
         if (snapshot.connectionState == ConnectionState.done) {
-          if (FirebaseAuth.instance.currentUser != null) {
-            // 'User is currently signed out!'
-            return const Login();
-          } else {
-            //'User is signed in!'
-            return const DashBord();
-          }
+          const Login();
+         
         }
 
         return const Center(child: Icon(Icons.circle_outlined));
