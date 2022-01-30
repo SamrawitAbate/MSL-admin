@@ -1,6 +1,5 @@
-import 'package:admin/pages/dashBord.dart';
 import 'package:admin/pages/login.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:admin/widget/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -40,8 +39,7 @@ class App extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           return const Login();
         }
-
-        return const Center(child: Icon(Icons.circle_outlined));
+        return const Loading();
       },
     );
   }

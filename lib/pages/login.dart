@@ -1,7 +1,7 @@
+import 'package:admin/pages/dashBord.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'activatePage.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -39,6 +39,7 @@ class _LoginState extends State<Login> with InputValidationMixin {
                             : 'Enter a valid email address';
                       },
                       controller: email),
+                      const Divider(),
                   TextFormField(
                     decoration: const InputDecoration(
                         border: OutlineInputBorder(), labelText: 'Password'),
@@ -48,6 +49,7 @@ class _LoginState extends State<Login> with InputValidationMixin {
                     controller: password,
                     obscureText: true,
                   ),
+                      const Divider(),
                   ElevatedButton(
                       onPressed: () async {
                         if (formGlobalKey.currentState!.validate()) {
@@ -59,13 +61,14 @@ class _LoginState extends State<Login> with InputValidationMixin {
                                     email: email.text, password: password.text);
                             if (userCredential.user != null) {
                               Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => const ActivatePage()));
+                                  builder: (context) => const DashBord()));
+                            }else{
+                              setState(() {
+                                message = 'No user found.';
+                              });
                             }
                           } on FirebaseAuthException catch (e) {
                             if (e.code == 'user-not-found') {
-                              setState(() {
-                                message = 'No user found for that email.';
-                              });
                             } else if (e.code == 'wrong-password') {
                               setState(() {
                                 message =
