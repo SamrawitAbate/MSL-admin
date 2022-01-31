@@ -1,6 +1,9 @@
+// ignore_for_file: file_names
+
 import 'package:admin/service/database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+// ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 import 'loading.dart';
 

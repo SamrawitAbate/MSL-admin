@@ -6,7 +6,11 @@ import 'package:flutter/material.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage(
-      {required this.uid, Key? key, required this.user,required this.disable,required this.accept})
+      {required this.uid,
+      Key? key,
+      required this.user,
+      required this.disable,
+      required this.accept})
       : super(key: key);
   final bool user, accept, disable;
   final String uid;
@@ -28,7 +32,8 @@ class ProfilePage extends StatelessWidget {
                 if (snapshot.hasData) {
                   var data = snapshot.data!;
                   Timestamp ts = data['dateOfBirth'] as Timestamp;
-                  bool empty = ts == Timestamp.fromDate(DateTime(1000, 10, 10))
+                  DateTime ds = ts.toDate();
+                  bool empty = ds == DateTime(1000, 10, 10)
                       ? true
                       : false;
                   return SingleChildScrollView(
@@ -91,7 +96,7 @@ class ProfilePage extends StatelessWidget {
                                 newMethod('Address:', data['address']),
                                 newMethod('Gender:', data['sex']),
                                 newMethod('Birthday:',
-                                    empty ? '' : ts.toDate().toString())
+                                    empty ? '' : '${ds.toLocal()}'.split(' ')[0])
                               ],
                             )),
                         const SizedBox(
@@ -109,11 +114,11 @@ class ProfilePage extends StatelessWidget {
                                 ],
                               ),
                         const SizedBox(height: 20),
-                         StreamBuilder<QuerySnapshot>(
-                            stream:  FirebaseFirestore.instance
-        .collection('comment')
-        .where('reciver_uid', isEqualTo: uid)
-        .snapshots(),
+                        StreamBuilder<QuerySnapshot>(
+                            stream: FirebaseFirestore.instance
+                                .collection('comment')
+                                .where('reciver_uid', isEqualTo: uid)
+                                .snapshots(),
                             builder: (context, snapshot) {
                               if (snapshot.hasError) {
                                 return Center(
@@ -150,7 +155,6 @@ class ProfilePage extends StatelessWidget {
                               }
                               return const Loading();
                             }),
-                        
                         !accept
                             ? Container()
                             : ElevatedButton(
@@ -171,25 +175,25 @@ class ProfilePage extends StatelessWidget {
                         !disable
                             ? Container()
                             : Column(
-                              children: [
-
-                                ElevatedButton(
-                                    style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all(Colors.red),
-                                    ),
-                                    onPressed: () async {
-                                      await disableAccount(uid, user);
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text(
-                                      'Disable',
-                                      style: TextStyle(
-                                          fontSize: 30,
-                                          fontWeight: FontWeight.w700),
-                                    )),
-                              ],
-                            )
+                                children: [
+                                  ElevatedButton(
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                Colors.red),
+                                      ),
+                                      onPressed: () async {
+                                        await disableAccount(uid, user);
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text(
+                                        'Disable',
+                                        style: TextStyle(
+                                            fontSize: 30,
+                                            fontWeight: FontWeight.w700),
+                                      )),
+                                ],
+                              )
                       ],
                     ),
                   );

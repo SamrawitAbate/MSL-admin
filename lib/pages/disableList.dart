@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:admin/pages/profile.dart';
 import 'package:admin/widget/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -52,7 +54,39 @@ class DisableAccount extends StatelessWidget {
                                                       : false,
                                                 ))),
                                     child: ListTile(
-                                      title: Text(id),
+                                      title:StreamBuilder<DocumentSnapshot>(
+                                stream: FirebaseFirestore.instance
+                                    .collection('account')
+                                    .doc(id)
+                                    .snapshots(),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<DocumentSnapshot> snap) {
+                                  if (snap.hasError) {
+                                    return Text('Error = ${snap.error}');
+                                  }
+                                  if (snap.hasData) {
+                                    var data = snap.data!;
+                                    return Row(
+                                      children: [
+                                        CircleAvatar(
+                                          radius: 20,
+                                          backgroundImage:
+                                              NetworkImage(data['photoUrl']),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            data['fullName'],
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 25),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  }
+                                  return Container();
+                                }),
                                       subtitle: Text(data[index]['message']),
                                       trailing: Text(who),
                                     ),

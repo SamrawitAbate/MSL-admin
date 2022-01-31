@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:admin/widget/customList.dart';
 import 'package:admin/widget/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

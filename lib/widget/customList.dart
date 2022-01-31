@@ -1,13 +1,18 @@
+// ignore_for_file: file_names
+
 import 'package:admin/pages/profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class CustomList extends StatelessWidget {
-  const CustomList({Key? key, required this.snapshot
-  ,required this.accept,required this.user
-  }) : super(key: key);
+  const CustomList(
+      {Key? key,
+      required this.snapshot,
+      required this.accept,
+      required this.user})
+      : super(key: key);
   final AsyncSnapshot<QuerySnapshot<Object?>> snapshot;
-  final bool user,  accept;
+  final bool user, accept;
   @override
   Widget build(BuildContext context) {
     return snapshot.data!.docs.isEmpty
@@ -32,8 +37,39 @@ class CustomList extends StatelessWidget {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: ListTile(
-                            title:
-                                Text(snapshot.data!.docs[index].id.toString()),
+                            title: StreamBuilder<DocumentSnapshot>(
+                                stream: FirebaseFirestore.instance
+                                    .collection('account')
+                                    .doc(snapshot.data!.docs[index].id)
+                                    .snapshots(),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<DocumentSnapshot> snap) {
+                                  if (snap.hasError) {
+                                    return Text('Error = ${snap.error}');
+                                  }
+                                  if (snap.hasData) {
+                                    var data = snap.data!;
+                                    return Row(
+                                      children: [
+                                        CircleAvatar(
+                                          radius: 20,
+                                          backgroundImage:
+                                              NetworkImage(data['photoUrl']),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            data['fullName'],
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 25),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  }
+                                  return Container();
+                                }),
                             trailing: Text('Rating ${snapshot2.data!['rate']}'),
                             subtitle: Text('${t.toLocal()}'.split(' ')[0]),
                             onTap: () {
@@ -41,7 +77,11 @@ class CustomList extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => ProfilePage(
-                                          uid: snapshot.data!.docs[index].id, accept: accept, user: user,disable: false,)));
+                                            uid: snapshot.data!.docs[index].id,
+                                            accept: accept,
+                                            user: user,
+                                            disable: false,
+                                          )));
                             },
                           ),
                         );
