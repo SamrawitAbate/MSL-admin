@@ -29,7 +29,7 @@ class CustomList extends StatelessWidget {
 
               return FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
                   future: FirebaseFirestore.instance
-                      .collection(user?'CRate':'SPRate  ')
+                      .collection(user?'CRate':'SPRate')
                       .doc(id)
                       .get(),
                   builder: (context, snapshot2) {
