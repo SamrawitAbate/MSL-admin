@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:admin/pages/disableList.dart';
+import 'package:admin/pages/paid.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +27,8 @@ class _DashBordState extends State<DashBord> {
     const ActivatePage(),
     const InactivatePage(),
     const Customer(),
-    const DisableAccount()
+    const DisableAccount(),
+    const PaidPage()
   ];
   bool minValue = false;
   @override
@@ -36,6 +38,7 @@ class _DashBordState extends State<DashBord> {
       inkButton(2, 'Active service provider', context),
       inkButton(3, 'Customer', context),
       inkButton(4, 'Disable Account', context),
+      inkButton(5, 'Paid Slip', context),
       IconButton(
           onPressed: () async {
             await FirebaseAuth.instance.signOut();

@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:admin/pages/profile.dart';
+import 'package:admin/pages/slip.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -9,10 +10,10 @@ class CustomList extends StatelessWidget {
       {Key? key,
       required this.snapshot,
       required this.accept,
-      required this.user})
+      required this.user,required this.slip})
       : super(key: key);
   final AsyncSnapshot<QuerySnapshot<Object?>> snapshot;
-  final bool user, accept;
+  final bool user, accept,slip;
   @override
   Widget build(BuildContext context) {
     return snapshot.data!.docs.isEmpty
@@ -28,7 +29,7 @@ class CustomList extends StatelessWidget {
 
               return FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
                   future: FirebaseFirestore.instance
-                      .collection('rate')
+                      .collection(user?'CRate':'SPRate  ')
                       .doc(id)
                       .get(),
                   builder: (context, snapshot2) {
@@ -73,6 +74,7 @@ class CustomList extends StatelessWidget {
                             trailing: Text('Rating ${snapshot2.data!['rate']}'),
                             subtitle: Text('${t.toLocal()}'.split(' ')[0]),
                             onTap: () {
+                              slip?Navigator.push(context, MaterialPageRoute(builder: (context)=>SlipPage(uid: snapshot.data!.docs[index].id))):
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(

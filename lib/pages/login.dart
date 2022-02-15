@@ -2,7 +2,6 @@ import 'package:admin/pages/dashBord.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
@@ -30,6 +29,20 @@ class _LoginState extends State<Login> with InputValidationMixin {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  const Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Text(
+                      'Maintenance Service Locator',
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Text('Admin Login',
+                        style: TextStyle(
+                            fontSize: 23, fontWeight: FontWeight.w500)),
+                  ),
                   TextFormField(
                       decoration: const InputDecoration(
                           border: OutlineInputBorder(), labelText: 'Email'),
@@ -39,7 +52,7 @@ class _LoginState extends State<Login> with InputValidationMixin {
                             : 'Enter a valid email address';
                       },
                       controller: email),
-                      const Divider(),
+                  const Divider(),
                   TextFormField(
                     decoration: const InputDecoration(
                         border: OutlineInputBorder(), labelText: 'Password'),
@@ -49,7 +62,7 @@ class _LoginState extends State<Login> with InputValidationMixin {
                     controller: password,
                     obscureText: true,
                   ),
-                      const Divider(),
+                  const Divider(),
                   ElevatedButton(
                       onPressed: () async {
                         if (formGlobalKey.currentState!.validate()) {
@@ -62,7 +75,7 @@ class _LoginState extends State<Login> with InputValidationMixin {
                             if (userCredential.user != null) {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => const DashBord()));
-                            }else{
+                            } else {
                               setState(() {
                                 message = 'No user found.';
                               });
@@ -82,7 +95,10 @@ class _LoginState extends State<Login> with InputValidationMixin {
                           }
                         }
                       },
-                      child: const Text('Log in')),
+                      child:const  Padding(
+                        padding:  EdgeInsets.all(10),
+                        child: Text('Log In',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w800),),
+                      )),
                   Text(message)
                 ],
               ),

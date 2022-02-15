@@ -24,7 +24,7 @@ class ActivatePage extends StatelessWidget {
             return CustomList(
               snapshot: snapshot,
               accept: true,
-              user: false,
+              user: false,slip: false,
             );
           }
           return const Loading();
