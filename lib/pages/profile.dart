@@ -39,53 +39,31 @@ class ProfilePage extends StatelessWidget {
                   return SingleChildScrollView(
                     child: Column(
                       children: <Widget>[
-                        Container(
-                            decoration: const BoxDecoration(
-                                gradient: LinearGradient(
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                    colors: [
-                                  Colors.black87,
-                                  Colors.black12,
-                                ])),
-                            child: Stack(
-                              children: [
-                                SizedBox(
-                                  width: double.infinity,
-                                  height: 250.0,
-                                  child: Center(
-                                    child: SingleChildScrollView(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: <Widget>[
-                                          CircleAvatar(
-                                            backgroundImage:
-                                                NetworkImage(data['photoUrl']),
-                                            radius: 80.0,
-                                          ),
-                                          const SizedBox(
-                                            height: 10.0,
-                                          ),
-                                          Text(
-                                            data['fullName'],
-                                            style: const TextStyle(
-                                              fontSize: 22.0,
-                                              color: Colors.black87,
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 10.0,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            )),
+                        Column(
+                          crossAxisAlignment:
+                              CrossAxisAlignment.center,
+                          mainAxisAlignment:
+                              MainAxisAlignment.center,
+                          children: <Widget>[
+                            CircleAvatar(
+                              backgroundImage:
+                                  NetworkImage(data['photoUrl']),
+                              radius: 80.0,
+                            ),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            Text(
+                              data['fullName'],
+                              style: const TextStyle(
+                                fontSize: 22.0,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                          ],
+                        ),
                         SizedBox(
                             width: double.infinity,
                             child: Column(
