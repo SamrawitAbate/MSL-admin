@@ -34,7 +34,13 @@ class App extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           debugPrint(snapshot.error.toString());
-          return const Center(child: Icon(Icons.error));
+          return Center(
+              child: Row(
+            children: [
+              const Icon(Icons.error),
+              Text(snapshot.error.toString())
+            ],
+          ));
         }
         if (snapshot.connectionState == ConnectionState.done) {
           return const Login();

@@ -13,6 +13,16 @@ class DisableAccount extends StatelessWidget {
     return StreamBuilder(
         stream: FirebaseFirestore.instance.collection('complain').snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
+          if (snapshot.hasError) {
+            debugPrint(snapshot.error.toString());
+            return Center(
+                child: Row(
+              children: [
+                const Icon(Icons.error),
+                Text(snapshot.error.toString())
+              ],
+            ));
+          }
           if (snapshot.hasData) {
             var data = snapshot.data!.docs;
             return data.isEmpty
@@ -23,6 +33,16 @@ class DisableAccount extends StatelessWidget {
                     future:
                         FirebaseFirestore.instance.collection('disable').get(),
                     builder: (context, snapShot) {
+                      if (snapshot.hasError) {
+                        debugPrint(snapshot.error.toString());
+                        return Center(
+                            child: Row(
+                          children: [
+                            const Icon(Icons.error),
+                            Text(snapshot.error.toString())
+                          ],
+                        ));
+                      }
                       if (snapShot.hasData) {
                         final a = snapShot.data!;
                         final allData = a.docs.map((doc) => doc.id).toList();
@@ -54,39 +74,45 @@ class DisableAccount extends StatelessWidget {
                                                       : false,
                                                 ))),
                                     child: ListTile(
-                                      title:StreamBuilder<DocumentSnapshot>(
-                                stream: FirebaseFirestore.instance
-                                    .collection('account')
-                                    .doc(id)
-                                    .snapshots(),
-                                builder: (BuildContext context,
-                                    AsyncSnapshot<DocumentSnapshot> snap) {
-                                  if (snap.hasError) {
-                                    return Text('Error = ${snap.error}');
-                                  }
-                                  if (snap.hasData) {
-                                    var data = snap.data!;
-                                    return Row(
-                                      children: [
-                                        CircleAvatar(
-                                          radius: 20,
-                                          backgroundImage:
-                                              NetworkImage(data['photoUrl']),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                            data['fullName'],
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 25),
-                                          ),
-                                        ),
-                                      ],
-                                    );
-                                  }
-                                  return Container();
-                                }),
+                                      title: StreamBuilder<DocumentSnapshot>(
+                                          stream: FirebaseFirestore.instance
+                                              .collection('account')
+                                              .doc(id)
+                                              .snapshots(),
+                                          builder: (BuildContext context,
+                                              AsyncSnapshot<DocumentSnapshot>
+                                                  snap) {
+                                            if (snap.hasError) {
+                                              return Text(
+                                                  'Error = ${snap.error}');
+                                            }
+                                            if (snap.hasData) {
+                                              var data = snap.data!;
+                                              return Row(
+                                                children: [
+                                                  CircleAvatar(
+                                                    radius: 20,
+                                                    backgroundImage:
+                                                        NetworkImage(
+                                                            data['photoUrl']),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Text(
+                                                      data['fullName'],
+                                                      style: const TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 25),
+                                                    ),
+                                                  ),
+                                                ],
+                                              );
+                                            }
+                                            return Container();
+                                          }),
                                       subtitle: Text(data[index]['message']),
                                       trailing: Text(who),
                                     ),
@@ -99,7 +125,7 @@ class DisableAccount extends StatelessWidget {
                     });
           }
           if (snapshot.hasError) {
-            throw Exception(snapshot.error);
+            throw Exception(snapshot.error.toString());
           }
           return const Loading();
         });

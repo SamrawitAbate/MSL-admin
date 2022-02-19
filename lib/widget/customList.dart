@@ -10,10 +10,11 @@ class CustomList extends StatelessWidget {
       {Key? key,
       required this.snapshot,
       required this.accept,
-      required this.user,required this.slip})
+      required this.user,
+      required this.slip})
       : super(key: key);
   final AsyncSnapshot<QuerySnapshot<Object?>> snapshot;
-  final bool user, accept,slip;
+  final bool user, accept, slip;
   @override
   Widget build(BuildContext context) {
     return snapshot.data!.docs.isEmpty
@@ -29,10 +30,20 @@ class CustomList extends StatelessWidget {
 
               return FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
                   future: FirebaseFirestore.instance
-                      .collection(user?'CRate':'SPRate')
+                      .collection(user ? 'CRate' : 'SPRate')
                       .doc(id)
                       .get(),
                   builder: (context, snapshot2) {
+                    if (snapshot2.hasError) {
+                      debugPrint(snapshot2.error.toString());
+                      return Center(
+                          child: Row(
+                        children: [
+                          const Icon(Icons.error),
+                          Text(snapshot2.error.toString())
+                        ],
+                      ));
+                    }
                     if (snapshot2.hasData) {
                       if (snapshot2.data!['rate'] < 2) {
                         return Padding(
@@ -45,8 +56,15 @@ class CustomList extends StatelessWidget {
                                     .snapshots(),
                                 builder: (BuildContext context,
                                     AsyncSnapshot<DocumentSnapshot> snap) {
-                                  if (snap.hasError) {
-                                    return Text('Error = ${snap.error}');
+                                  if (snapshot.hasError) {
+                                    debugPrint(snapshot.error.toString());
+                                    return Center(
+                                        child: Row(
+                                      children: [
+                                        const Icon(Icons.error),
+                                        Text(snapshot.error.toString())
+                                      ],
+                                    ));
                                   }
                                   if (snap.hasData) {
                                     var data = snap.data!;
@@ -71,19 +89,27 @@ class CustomList extends StatelessWidget {
                                   }
                                   return Container();
                                 }),
-                            trailing: Text('Rating ${snapshot2.data!['rate']}'),
+                            trailing: Text(
+                                'Rating ${snapshot2.data!['rate']} // ${snapshot2.data!['count']}'),
                             subtitle: Text('${t.toLocal()}'.split(' ')[0]),
                             onTap: () {
-                              slip?Navigator.push(context, MaterialPageRoute(builder: (context)=>SlipPage(uid: snapshot.data!.docs[index].id))):
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ProfilePage(
-                                            uid: snapshot.data!.docs[index].id,
-                                            accept: accept,
-                                            user: user,
-                                            disable: false,
-                                          )));
+                              slip
+                                  ? Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => SlipPage(
+                                              uid: snapshot
+                                                  .data!.docs[index].id)))
+                                  : Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ProfilePage(
+                                                uid: snapshot
+                                                    .data!.docs[index].id,
+                                                accept: accept,
+                                                user: user,
+                                                disable: false,
+                                              )));
                             },
                           ),
                         );

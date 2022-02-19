@@ -18,13 +18,20 @@ class ActivatePage extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             debugPrint(snapshot.error.toString());
-            return Center(child: Text('Error: ${snapshot.error}'));
+            return Center(
+                child: Row(
+              children: [
+                const Icon(Icons.error),
+                Text(snapshot.error.toString())
+              ],
+            ));
           }
           if (snapshot.hasData) {
             return CustomList(
               snapshot: snapshot,
               accept: true,
-              user: false,slip: false,
+              user: false,
+              slip: false,
             );
           }
           return const Loading();

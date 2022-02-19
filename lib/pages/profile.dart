@@ -27,27 +27,30 @@ class ProfilePage extends StatelessWidget {
                   .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<DocumentSnapshot> snapshot) {
-                if (snapshot.hasError) return Text('Error = ${snapshot.error}');
-
+                if (snapshot.hasError) {
+                  debugPrint(snapshot.error.toString());
+                  return Center(
+                      child: Row(
+                    children: [
+                      const Icon(Icons.error),
+                      Text(snapshot.error.toString())
+                    ],
+                  ));
+                }
                 if (snapshot.hasData) {
                   var data = snapshot.data!;
                   Timestamp ts = data['dateOfBirth'] as Timestamp;
                   DateTime ds = ts.toDate();
-                  bool empty = ds == DateTime(1000, 10, 10)
-                      ? true
-                      : false;
+                  bool empty = ds == DateTime(1000, 10, 10) ? true : false;
                   return SingleChildScrollView(
                     child: Column(
                       children: <Widget>[
                         Column(
-                          crossAxisAlignment:
-                              CrossAxisAlignment.center,
-                          mainAxisAlignment:
-                              MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             CircleAvatar(
-                              backgroundImage:
-                                  NetworkImage(data['photoUrl']),
+                              backgroundImage: NetworkImage(data['photoUrl']),
                               radius: 80.0,
                             ),
                             const SizedBox(
@@ -73,8 +76,11 @@ class ProfilePage extends StatelessWidget {
                                 newMethod('Email:', data['email']),
                                 newMethod('Address:', data['address']),
                                 newMethod('Gender:', data['sex']),
-                                newMethod('Birthday:',
-                                    empty ? '' : '${ds.toLocal()}'.split(' ')[0])
+                                newMethod(
+                                    'Birthday:',
+                                    empty
+                                        ? ''
+                                        : '${ds.toLocal()}'.split(' ')[0])
                               ],
                             )),
                         const SizedBox(
@@ -99,8 +105,14 @@ class ProfilePage extends StatelessWidget {
                                 .snapshots(),
                             builder: (context, snapshot) {
                               if (snapshot.hasError) {
+                                debugPrint(snapshot.error.toString());
                                 return Center(
-                                    child: Text('Error: ${snapshot.error}'));
+                                    child: Row(
+                                  children: [
+                                    const Icon(Icons.error),
+                                    Text(snapshot.error.toString())
+                                  ],
+                                ));
                               }
                               if (snapshot.hasData) {
                                 final List<DocumentSnapshot> documents =

@@ -18,6 +18,16 @@ class ListFile extends StatelessWidget {
         future: listFiles(dir, uid),
         builder: (BuildContext context,
             AsyncSnapshot<firebase_storage.ListResult> snapshot) {
+          if (snapshot.hasError) {
+            debugPrint(snapshot.error.toString());
+            return Center(
+                child: Row(
+              children: [
+                const Icon(Icons.error),
+                Text(snapshot.error.toString())
+              ],
+            ));
+          }
           if (snapshot.connectionState == ConnectionState.done &&
               snapshot.hasData) {
             return snapshot.data!.items.isEmpty

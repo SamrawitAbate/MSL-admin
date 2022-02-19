@@ -11,20 +11,24 @@ class PaidPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('paid')
-            .snapshots(),
+        stream: FirebaseFirestore.instance.collection('paid').snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             debugPrint(snapshot.error.toString());
-            return Center(child: Text('Error: ${snapshot.error}'));
+            return Center(
+                child: Row(
+              children: [
+                const Icon(Icons.error),
+                Text(snapshot.error.toString())
+              ],
+            ));
           }
           if (snapshot.hasData) {
             return CustomList(
               snapshot: snapshot,
               accept: true,
-              user: false,slip: true,
-
+              user: false,
+              slip: true,
             );
           }
           return const Loading();

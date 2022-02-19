@@ -84,7 +84,7 @@ class _HomeState extends State<Home> {
           const Center(
             child: Padding(
               padding: EdgeInsets.all(8.0),
-              child: Text('Complains',style: TextStyle(fontSize:25)),
+              child: Text('Complains', style: TextStyle(fontSize: 25)),
             ),
           ),
           Card(
@@ -93,6 +93,13 @@ class _HomeState extends State<Home> {
             child: FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
                 future: FirebaseFirestore.instance.collection('disable').get(),
                 builder: (context, snapShot) {
+                  if (snapShot.hasError) {
+                    debugPrint(snapShot.error.toString());
+                    return Center(
+                        child: Row(
+                      children: [const Icon(Icons.error), Text(snapShot.error.toString())],
+                    ));
+                  }
                   if (snapShot.hasData) {
                     final a = snapShot.data!;
                     final allData = a.docs.map((doc) => doc.id).toList();
@@ -102,6 +109,16 @@ class _HomeState extends State<Home> {
                             .snapshots(),
                         builder: (context,
                             AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
+                          if (snapshot.hasError) {
+                            debugPrint(snapshot.error.toString());
+                            return Center(
+                                child: Row(
+                              children: [
+                                const Icon(Icons.error),
+                                Text(snapshot.error.toString())
+                              ],
+                            ));
+                          }
                           if (snapshot.hasData) {
                             var data = snapshot.data!.docs;
                             return data.isEmpty
@@ -139,7 +156,7 @@ class _HomeState extends State<Home> {
                                   );
                           }
                           if (snapshot.hasError) {
-                            throw Exception(snapshot.error);
+                            throw Exception(snapshot.error.toString());
                           }
                           return const Loading();
                         });

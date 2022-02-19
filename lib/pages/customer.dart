@@ -9,17 +9,26 @@ class Customer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-        .collection('userDetail')
-        .snapshots(),
+        stream: FirebaseFirestore.instance.collection('userDetail').snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             debugPrint(snapshot.error.toString());
-            return Center(child: Text('Error: ${snapshot.error}'));
+            return Center(
+                child: Row(
+              children: [
+                const Icon(Icons.error),
+                Text(snapshot.error.toString())
+              ],
+            ));
           }
 
           if (snapshot.hasData) {
-            return CustomList(snapshot: snapshot, accept: false,  user: true,slip: false,);
+            return CustomList(
+              snapshot: snapshot,
+              accept: false,
+              user: true,
+              slip: false,
+            );
           }
           return const Loading();
         });

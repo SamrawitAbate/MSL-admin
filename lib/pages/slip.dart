@@ -30,8 +30,16 @@ class _SlipPageState extends State<SlipPage> {
                   .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<DocumentSnapshot> snapshot) {
-                if (snapshot.hasError) return Text('Error = ${snapshot.error}');
-
+                if (snapshot.hasError) {
+                  debugPrint(snapshot.error.toString());
+                  return Center(
+                      child: Row(
+                    children: [
+                      const Icon(Icons.error),
+                      Text(snapshot.error.toString())
+                    ],
+                  ));
+                }
                 if (snapshot.hasData) {
                   var data = snapshot.data;
                   return SingleChildScrollView(
