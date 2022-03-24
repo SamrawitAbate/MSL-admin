@@ -7,17 +7,17 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: const FirebaseOptions(
-        apiKey: "AIzaSyDTuMFxPAdVxK8xjsrm3h9q1vleWR8I5tk",
-        authDomain: "maintenance-service-locator.firebaseapp.com",
-        projectId: "maintenance-service-locator",
-        storageBucket: "maintenance-service-locator.appspot.com",
-        messagingSenderId: "451295862796",
-        appId: "1:451295862796:web:02ab98e4a5917ff9814e29"),
+        apiKey: "AIzaSyAliJ1HpRz75DDVo29iWp0BePOIkqvwjxo",
+        authDomain: "car-service-c12ce.firebaseapp.com",
+        projectId: "car-service-c12ce",
+        storageBucket: "car-service-c12ce.appspot.com",
+        messagingSenderId: "801355599085",
+        appId: "1:801355599085:web:7c5f7659a8ede553ab50e4"),
   );
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     title: 'Maintenance service locator',
-    theme: ThemeData(brightness: Brightness.dark, fontFamily: 'Numans'),
+    theme: ThemeData(brightness: Brightness.light, fontFamily: 'Numans'),
     home: App(),
   ));
 }
